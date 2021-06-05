@@ -21,14 +21,16 @@ echo $this->ajaxAwareScript('js/controller/square/booking/customization.min.js')
 
     <p class="large-text"><?= $squareType . ' ' . $this->t($square->need('name')) ?></p>
 
-    <?= $this->squareDateFormat($this->dateStart, $this->dateEnd) ?>
+    <?= $this->squareDateFormat($this->dateStart, $this->dateEnd)?><br/>
+
+    <?= 'Aufgrund der Spiellänge müssen mindestens ',$min_cap=(strtotime($dateEnd->format('Y/m/d H:i:s')) - strtotime($dateStart->format('Y/m/d H:i:s')))/1800,' Mitspieler benannt werden'?></p>
 
     <?= sprintf('<p><span class="green">' . $this->t('You are going to book this %s.') . '</span></p>', $squareType) ?>
 
     <div class="separator separator-line"></div>
 
     <div class="sandbox">
-        <?= $this->squareQuantityChoice($square, $this->bookings) ?>
+        <?= $this->squareQuantityChoice($square, $this->bookings,$min_cap) ?>
     </div>
 
     <div class="separator separator-line"></div>
