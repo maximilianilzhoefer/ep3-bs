@@ -105,7 +105,7 @@ class CalendarController extends AbstractActionController
 
         $getBookingUsers = false;
 
-        if ($user && $user->can('calendar.see-data')) {
+        if ($user && $user->can('calendar.see-past , calendar.see-data')) {
             $getBookingUsers = true;
             $dateNow->setTime(0, 0, 0);
         }
