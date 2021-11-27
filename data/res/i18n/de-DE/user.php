@@ -65,7 +65,7 @@ return [
     'This account is considered a placeholder and thus cannot login' => 'Leider wurde dieses Benutzerkonto als Platzhalter definiert.',
     'Email address and/or password invalid' => 'E-Mail Adresse und/oder Passwort falsch',
     'This account is currently blocked' => 'Dieses Benutzerkonto ist derzeit gesperrt',
-    'This account has not yet been activated' => 'Dieses Benutzerkonto wurde noch nicht aktiviert',
+    'This account has not yet been activated' => 'Dieses Benutzerkonto wurde noch nicht aktiviert. Vermutlich hast du die E-Mail geändert. Du solltest eine Mail mit einem Aktivierungslink bekommen haben. Schau auch einmal in den Spam-Ordner',
 
     'Welcome, %s' => 'Willkommen, %s',
 
