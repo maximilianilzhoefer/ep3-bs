@@ -1,7 +1,9 @@
 <form method="post" action="<?= $this->url('user/login') ?>">
     <table style="height: 100%;">
         <tr>
-            <td style="padding-right: 12px;">
+            <!--
+			Das ist das Original
+			<td style="padding-right: 12px;">
                 <?php
 
                 echo sprintf($this->t('To book %s, %splease register first%s'),
@@ -10,11 +12,22 @@
 
                 ?>
             </td>
+			Folgend kommt meine Anpassung. 
+			-->
+			<td style="padding-right: 12px;">
+                <?php
 
+                echo sprintf($this->t('Zum Buchen der Plätze musst du dich anmelden. <br> Weitere Infos findest du auch in der <a href="https://www.rsk-tennis.de/docs/Dokumentation.pdf" target="_blank" >Dokumentation</a>'),
+                    $this->option('subject.square.type.plural'),
+                    '<br><a href="' . $this->url('user/registration') . '" class="symbolic symbolic-plus-link">', '</a>');
+
+                ?>
+            </td>
+<!--
             <td class="responsive-pass-5" style="padding-left: 12px; padding-right: 12px; border-left: solid 1px #CCC;">
                 <?= sprintf($this->t('or simply %s login here'), '<br>') ?>
             </td>
-
+-->
             <td class="responsive-pass-3">
                 <div class="inline-element">
                     <label for="lf-email" class="inline-label symbolic symbolic-email"><span><?= $this->t('Email address') ?></span></label>
