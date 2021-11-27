@@ -216,6 +216,7 @@ a#logo:active { top: 1px; }
 #calendar-toolbar table td:last-child { padding-right: 0; }
 
 #calendar-toolbar-datepicker { float: left; }
+#calendar-toolbar-doku { float: center; }
 #calendar-toolbar-userpanel { float: right; }
 #calendar { clear: both; }
 
@@ -733,6 +734,7 @@ option { padding-right: 16px; }
 
     #calendar-toolbar { text-align: center; }
     #calendar-toolbar-datepicker { display: inline-block; margin-left: 8px; margin-right: 8px; float: none; }
+	#calendar-toolbar-doku { display: inline-block; margin-left: 8px; margin-right: 8px; float: none; }
     #calendar-toolbar-userpanel { display: inline-block; margin-left: 8px; margin-right: 8px; float: none; }
 }
 
