@@ -13,6 +13,7 @@ use Exception;
 use RuntimeException;
 use Square\Manager\SquareManager;
 use User\Manager\UserSessionManager;
+use User\Manager\UserManager;
 
 class SquareValidator extends AbstractService
 {
@@ -22,17 +23,19 @@ class SquareValidator extends AbstractService
     protected $eventManager;
     protected $squareManager;
     protected $optionManager;
+    protected $userManager;
     protected $user;
 
     public function __construct(BookingManager $bookingManager, ReservationManager $reservationManager,
         EventManager $eventManager, SquareManager $squareManager, UserSessionManager $userSessionManager,
-        OptionManager $optionManager)
+        OptionManager $optionManager, UserManager $userManager)
     {
         $this->bookingManager = $bookingManager;
         $this->reservationManager = $reservationManager;
         $this->eventManager = $eventManager;
         $this->squareManager = $squareManager;
         $this->optionManager = $optionManager;
+        $this->userManager = $userManager;
         $this->user = $userSessionManager->getSessionUser();
     }
 
@@ -109,11 +112,11 @@ class SquareValidator extends AbstractService
 
         $dateMin = new DateTime();
 
-        if ($square->get('min_range_book', 0) == 0) {
-            $dateMin->modify('-' . ($square->get('time_block_bookable') / 2) . ' sec');
-        } else {
-            $dateMin->modify('+' . $square->get('min_range_book', 0) . ' sec');
-        }
+													 
+        $dateMin->modify('-' . $square->get('time_block') . ' seconds');
+				
+																			   
+		 
 
         $dateMax = new DateTime();
         $dateMax->modify('+' . $square->get('range_book', 0) . ' sec');
@@ -271,6 +274,9 @@ class SquareValidator extends AbstractService
         $bookingsFromUser = array();
 
         foreach ($possibleBookings as $bid => $booking) {
+            $reservationOwner = $this->userManager->get($booking->need('uid'));
+            $booking->setExtra('user', $reservationOwner);
+            
             if ($booking->need('sid') == $square->need('sid')) {
                 if ($booking->need('visibility') == 'public') {
                     if ($booking->need('status') != 'cancelled') {
@@ -407,6 +413,11 @@ class SquareValidator extends AbstractService
 
         $reservationCancelDate = new DateTime();
         $reservationCancelDate->modify('+' . $squareCancelRange . ' sec');
+        $current_time_block_cancelable = $square->getMeta('current-time-block-cancelable', 'false');
+
+        if ($current_time_block_cancelable == 'true') {
+            $reservationCancelDate->modify('-' .  $square->get('time_block') . ' seconds');
+        }
 
         if ($reservationStartDate > $reservationCancelDate) {
             return true;
