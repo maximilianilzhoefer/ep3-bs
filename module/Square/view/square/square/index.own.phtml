@@ -2,9 +2,52 @@
 
 $squareType = $this->option('subject.square.type');
 
+if ($this->notBookableReason) {
+    $reason = $this->notBookableReason;
+} else {
+    $outputPlayerNames = null;
+    if ($user !== null) {
+        // Mitspieler holen
+        foreach ($bookings as $booking) {
+            $reservationOwner = $booking->getExtra('user')->get('alias');
+            if ($outputPlayerNames === null) {
+                $outputPlayerNames = $reservationOwner;
+            } else {
+                $outputPlayerNames .= sprintf(', %1$s', $reservationOwner);
+            }
+            
+            $playerNames = $booking->getMeta('player-names');
+            if ($playerNames) {
+                $playerNames = @unserialize($playerNames);
+                if ($playerNames) {
+                    foreach ($playerNames as $playerData) {
+                        $nameData = trim($playerData['value']);
+                        if ($nameData !== "") {
+                            if ($outputPlayerNames === null) {
+                                $outputPlayerNames = $nameData;
+                            } else {
+                                $outputPlayerNames .= sprintf(', %1$s', $nameData);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    $reason = $this->t('Dieser Platz wurde für Dich bereits mit folgenden Spielern gebucht:');
+
+    if ($outputPlayerNames != null) {
+        $reason .= sprintf('<br>(%1$s)', $outputPlayerNames);
+    }
+}
+
+echo sprintf('<p><span class="green">' . $reason . '</span></p>', $squareType);
+
+
 foreach ($this->bookingsFromUser as $bid => $booking) {
-    echo sprintf('<p><span class="green">' . $this->t('This %s has been %sbooked to you%s.') . '</span></p>',
-        $squareType, '<b>', '</b>');
+    //echo sprintf('<p><span class="green">' . $this->t('This %s has been %sbooked to you%s.') . '</span></p> <br>',
+    //    $squareType, '<b>', '</b>');
 
     if ($this->validator->isCancellable($booking)) {
         echo sprintf('<p><a href="%s" class="default-button squarebox-internal-link"><span class="symbolic symbolic-cross">%s</span></a></p>',
